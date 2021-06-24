@@ -18,8 +18,20 @@ public class ActivityController {
         this.gson = new Gson();
     }
 
-    @GetMapping("/activities/{category}")
-    public String getActivitiesByCategory(@PathVariable("category") String category) {
-        return gson.toJson(activityService.getActivitiesByCategory(category));
+    @GetMapping
+    public ResponseEntity getActivitiesByFilters(@RequestParam("city") String city,
+                                                 @RequestParam("category") String category,
+                                                 @RequestParam("age") String age
+                                                 ) {
+        if (!categoryService.isInEnum(category) && !category.equals("ALL")) return ResponseEntity.badRequest().body("Invalid category");
+
+        if (!isNumeric(age) && !age.equals("ALL")) return ResponseEntity.badRequest().body("Invalid age");
+
+        return ResponseEntity.ok(activityService.getActivitiesByFilters(city, category, age));
     }
+
+    private boolean isNumeric(String strNum) {
+        return strNum.matches("\\d+");
+    }
+
 }
