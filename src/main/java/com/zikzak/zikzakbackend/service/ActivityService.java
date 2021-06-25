@@ -17,12 +17,12 @@ public class ActivityService {
     public List<ActivityModel> getActivitiesByFilters(String city, String category, String age) {
         if (category.equals("ALL")){
             if (age.equals("ALL")){
-                return activityRepository.findAllByCity(city);
+                return activityRepository.findAllByCityIgnoreCase(city);
             }
-            return activityRepository.findAllByCityAndAgeMaxLimitLessThanEqualAndAgeMinLimitGreaterThanEqual(city, Integer.parseInt(age), Integer.parseInt(age));
+            return activityRepository.findAllByCityIgnoreCaseAndAgeMaxLimitGreaterThanEqualAndAgeMinLimitLessThanEqual(city, Integer.parseInt(age), Integer.parseInt(age));
         }else if (age.equals("ALL")){
-            return activityRepository.findAllByCityAndCategory(city, Categories.valueOf(category));
+            return activityRepository.findAllByCityIgnoreCaseAndCategory(city, Categories.valueOf(category));
         }
-        return activityRepository.findAllByCityAndCategoryAndAgeMaxLimitLessThanEqualAndAgeMinLimitGreaterThanEqual(city, Categories.valueOf(category), Integer.parseInt(age), Integer.parseInt(age));
+        return activityRepository.findAllByCityIgnoreCaseAndCategoryAndAgeMaxLimitGreaterThanEqualAndAgeMinLimitLessThanEqual(city, Categories.valueOf(category), Integer.parseInt(age), Integer.parseInt(age));
     }
 }
