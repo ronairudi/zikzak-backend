@@ -11,11 +11,11 @@ import java.util.List;
 @Repository
 public interface ActivityRepository extends JpaRepository<ActivityModel, Long> {
 
-    List<ActivityModel> findAllByCity(String city);
+    List<ActivityModel> findAllByCityIgnoreCase(String city);
 
-    List<ActivityModel> findAllByCityAndAgeMaxLimitLessThanEqualAndAgeMinLimitGreaterThanEqual(String city, int age, int age2);
+    List<ActivityModel> findAllByCityIgnoreCaseAndAgeMaxLimitGreaterThanEqualAndAgeMinLimitLessThanEqual(String city, int age, int age2);
 
-    List<ActivityModel> findAllByCityAndCategory(String city, Categories category);
+    List<ActivityModel> findAllByCityIgnoreCaseAndCategory(String city, Categories category);
 
-    List<ActivityModel> findAllByCityAndCategoryAndAgeMaxLimitLessThanEqualAndAgeMinLimitGreaterThanEqual(String city, Categories category, int age, int age2);
+    List<ActivityModel> findAllByCityIgnoreCaseAndCategoryAndAgeMaxLimitGreaterThanEqualAndAgeMinLimitLessThanEqual(String city, Categories category, int age, int age2);
 }
