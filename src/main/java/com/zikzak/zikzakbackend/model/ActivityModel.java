@@ -48,4 +48,14 @@ public class ActivityModel {
 
     //  @SerializedName("city")
     private String city;
+
+    private float priceInHUF;
+
+    private int durationInMinutes;
+
+    private String subcategory;
+
+    private boolean isActive;
+
+    private boolean isPremium;
 }
