@@ -17,40 +17,42 @@ public class Runner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        activityRepository.saveAll(
-        Arrays.asList(new ActivityModel(1,
-                "Festés",
-                Categories.ART,
-                "0123456789",
-                "festés@gmail.com",
-                3,
-                12,
-                47.48504283919209F,
-                19.216608705686475F,
-                "",
-                "Budapest"),
-        new ActivityModel(2,
-                "Úszás",
-                Categories.SPORT,
-                "012334354657",
-                "úszás@gmail.com",
-                8,
-                10,
-                47.480137429426364F,
-                19.115226066466942F,
-                "",
-                "Budapest"),
-        new ActivityModel(3,
-                "Múzeum",
-                Categories.EDUCATION,
-                "012343452436",
-                "múzeum@gmail.com",
-                6,
-                10,
-                47.51572120351807F,
-                19.07556873442414F,
-                "",
-                "Budapest"))
-        );
+        ActivityModel art = ActivityModel.builder()
+                .name("Alkotásutca").category(Categories.ART)
+                .phoneNumber("36203340772").email("info@alkotasutca.hu")
+                .ageMinLimit(10).ageMaxLimit(12)
+                .latitude(47.515390F).longitude(19.052890F)
+                .comment("Az ország legnagyobb és legkényelmesebb élményfestés foglalkozását nyújtjuk. Az inspiráló környezeten túl az alkotáshoz minden alapanyagot és segítséget biztosítunk.")
+                .city("Budapest").zipCode(1136).address("Pannónia u. 30")
+                .priceInHUF(9990).durationInMinutes(180)
+                .subcategory("Élményfestés")
+                .isActive(true).isPremium(false)
+                .build();
+
+        ActivityModel sport = ActivityModel.builder()
+                .name("Smile Úszóiskola").category(Categories.SPORT)
+                .phoneNumber("36305995762").email("info@smileuszoiskola.hu")
+                .ageMinLimit(4).ageMaxLimit(8)
+                .latitude(47.520990F).longitude(19.127897F)
+                .comment("A Smile Úszóiskola elsődleges célja, hogy megszerettesse a vizet a gyermekkel, és megfelelő úszásalapot biztosítson a jövőre – akár verseny, akár hobbi szinten szeretnék folytatni az úszást.")
+                .city("Budapest").zipCode(1149).address("Egressy út 178/F")
+                .priceInHUF(3500).durationInMinutes(45)
+                .subcategory("Kezdő úszás")
+                .isActive(true).isPremium(true)
+                .build();
+
+        ActivityModel education = ActivityModel.builder()
+                .name("Anyanyelvi Angol Tanár").category(Categories.EDUCATION)
+                .phoneNumber("36305423790").email("anyanyelviangoltanar@gmail.com")
+                .ageMinLimit(8).ageMaxLimit(12)
+                .latitude(47.532160F).longitude(19.017500F)
+                .comment("Tarné Anna vagyok, anyanyelvi magántanár, 25 éves tapasztalattal, töretlen lelkesedéssel várok minden kedves tanítványt.")
+                .city("Budapest").zipCode(1037).address("Szépvölgyi út 115")
+                .priceInHUF(7500).durationInMinutes(60)
+                .subcategory("Angol óra")
+                .isActive(false).isPremium(false)
+                .build();
+
+        activityRepository.saveAll(Arrays.asList(art, sport, education));
     }
 }
