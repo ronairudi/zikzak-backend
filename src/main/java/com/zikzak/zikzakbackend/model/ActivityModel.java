@@ -49,6 +49,8 @@ public class ActivityModel {
     //  @SerializedName("city")
     private String city;
 
+    private String address;
+
     private float priceInHUF;
 
     private int durationInMinutes;
