@@ -2,7 +2,9 @@ package com.zikzak.zikzakbackend;
 
 import com.zikzak.zikzakbackend.model.ActivityModel;
 import com.zikzak.zikzakbackend.model.Categories;
+import com.zikzak.zikzakbackend.model.UserDto;
 import com.zikzak.zikzakbackend.repository.ActivityRepository;
+import com.zikzak.zikzakbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,9 @@ public class Runner implements CommandLineRunner {
 
     @Autowired
     private ActivityRepository activityRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public void run(String... args) {
@@ -54,5 +59,8 @@ public class Runner implements CommandLineRunner {
                 .build();
 
         activityRepository.saveAll(Arrays.asList(art, sport, education));
+
+        UserDto user = UserDto.builder().email("admin@zikzak.hu").password("admin").roleName("ADMIN").build();
+        userService.addUser(user);
     }
 }
