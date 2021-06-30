@@ -36,6 +36,8 @@ public class ActivityService {
                 .city(clientForm.getCity())
                 .zipCode(Integer.parseInt(clientForm.getZipCode()))
                 .address(clientForm.getStreet() + ", " + clientForm.getStreetNum())
+                .latitude(clientForm.getLatitude())
+                .longitude(clientForm.getLongitude())
                 .name(clientForm.getActivityName())
                 .category(clientForm.getCategory())
                 .phoneNumber(clientForm.getPhone())

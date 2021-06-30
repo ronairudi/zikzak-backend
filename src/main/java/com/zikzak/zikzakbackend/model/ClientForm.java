@@ -8,6 +8,8 @@ public class ClientForm {
     private String zipCode;
     private String street;
     private String streetNum;
+    private float latitude;
+    private float longitude;
     private String activityName;
     private Categories category;
     private String phone;
