@@ -41,6 +41,8 @@ public class ActivityService {
                 .phoneNumber(clientForm.getPhone())
                 .email(clientForm.getEmail())
                 .comment(clientForm.getDescription())
+                .priceInHUF(clientForm.getPrice())
+                .durationInMinutes(clientForm.getMinutes())
                 .ageMinLimit(clientForm.getMinAge())
                 .ageMaxLimit(clientForm.getMaxAge())
                 .isPremium(clientForm.isPremium())

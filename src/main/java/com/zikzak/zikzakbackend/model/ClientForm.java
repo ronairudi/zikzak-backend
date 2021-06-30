@@ -13,6 +13,8 @@ public class ClientForm {
     private String phone;
     private String email;
     private String description;
+    private int price;
+    private int minutes;
     private int minAge;
     private int maxAge;
     private boolean isPremium;
