@@ -1,15 +1,14 @@
 package com.zikzak.zikzakbackend.controller;
 
 import com.google.gson.Gson;
+import com.zikzak.zikzakbackend.model.ActivityModel;
+import com.zikzak.zikzakbackend.model.ClientForm;
 import com.zikzak.zikzakbackend.service.ActivityService;
 import com.zikzak.zikzakbackend.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @CrossOrigin(origins = {"${development.url}", "${production.url}"})
@@ -37,6 +36,13 @@ public class ActivityController {
         if (!isNumeric(age) && !age.equals("ALL")) return ResponseEntity.badRequest().body("Invalid age");
 
         return ResponseEntity.ok(activityService.getActivitiesByFilters(city, category, age));
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity addActivity(@RequestBody ClientForm clientForm) {
+        ActivityModel activityModel = activityService.clientFormToActivity(clientForm);
+        activityService.saveActivity(activityModel);
+        return ResponseEntity.ok("");
     }
 
     private boolean isNumeric(String strNum) {
