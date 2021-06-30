@@ -42,7 +42,6 @@ public class AuthController {
             String password = userDto.getPassword();
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             Role role = Role.valueOf(authentication.getAuthorities().stream().findFirst().orElseThrow().getAuthority());
-            System.out.println(role);
             String jwt = jwtTokenServices.createToken(email, role);
             Cookie cookie = new Cookie("jwt", jwt);
 //            cookie.setSecure(true);
