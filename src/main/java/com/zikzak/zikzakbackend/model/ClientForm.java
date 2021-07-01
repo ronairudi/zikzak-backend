@@ -1,5 +1,6 @@
 package com.zikzak.zikzakbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -19,5 +20,6 @@ public class ClientForm {
     private int minutes;
     private int minAge;
     private int maxAge;
+    @JsonProperty
     private boolean isPremium;
 }
