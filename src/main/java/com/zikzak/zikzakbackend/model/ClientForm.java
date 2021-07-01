@@ -13,6 +13,7 @@ public class ClientForm {
     private float longitude;
     private String activityName;
     private Categories category;
+    private String subcategory;
     private String phone;
     private String email;
     private String description;
