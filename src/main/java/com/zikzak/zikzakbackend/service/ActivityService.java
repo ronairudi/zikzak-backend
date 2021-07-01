@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ActivityService {
@@ -19,6 +20,17 @@ public class ActivityService {
         activityRepository.save(activityModel);
     }
 
+    public void deleteActivityById(Long id) {
+        activityRepository.deleteById(id);
+    }
+
+    public void activateActivity(Long id) {
+        ActivityModel activityModel = activityRepository.findById(id).orElseThrow( ()-> new NoSuchElementException("Activity not found by id - " + id));
+        activityModel.setActive(true);
+        activityRepository.save(activityModel);
+    }
+
+
     public List<ActivityModel> getActivitiesByFilters(String city, String category, String age) {
         if (category.equals("ALL")){
             if (age.equals("ALL")){
@@ -29,6 +41,10 @@ public class ActivityService {
             return activityRepository.findAllByCityIgnoreCaseAndCategory(city, Categories.valueOf(category));
         }
         return activityRepository.findAllByCityIgnoreCaseAndCategoryAndAgeMaxLimitGreaterThanEqualAndAgeMinLimitLessThanEqual(city, Categories.valueOf(category), Integer.parseInt(age), Integer.parseInt(age));
+    }
+
+    public List<ActivityModel> getInactiveActivities(){
+        return activityRepository.getInactiveActivities();
     }
 
     public ActivityModel clientFormToActivity(ClientForm clientForm) {
