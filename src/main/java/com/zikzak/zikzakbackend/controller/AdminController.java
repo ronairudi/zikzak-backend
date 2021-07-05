@@ -23,11 +23,6 @@ public class AdminController {
         return activityService.getInactiveActivities();
     }
 
-    @PostMapping("/update/{id}")
-    public void activateActivity(@PathVariable("id") Long id) {
-            activityService.activateActivity(id);
-    }
-
     @DeleteMapping("/update/{id}")
     public void deleteActivity(@PathVariable("id") Long id) {
         activityService.deleteActivityById(id);

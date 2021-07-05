@@ -24,12 +24,6 @@ public class ActivityService {
         activityRepository.deleteById(id);
     }
 
-    public void activateActivity(Long id) {
-        ActivityModel activityModel = activityRepository.findById(id).orElseThrow( ()-> new NoSuchElementException("Activity not found by id - " + id));
-        activityModel.setActive(true);
-        activityRepository.save(activityModel);
-    }
-
     public void updateActivityById(Long id, ActivityModel activityModel) {
         activityModel.setId(id);
         activityRepository.save(activityModel);
