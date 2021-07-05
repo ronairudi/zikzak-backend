@@ -30,6 +30,28 @@ public class ActivityService {
         activityRepository.save(activityModel);
     }
 
+    public void updateActivityById(Long id, ActivityModel newActivityModel) {
+        ActivityModel oldActivityModel = activityRepository.findById(id).orElseThrow( ()-> new NoSuchElementException("Activity not found by id - " + id));
+
+        oldActivityModel.setAddress(newActivityModel.getAddress());
+        oldActivityModel.setAgeMinLimit(newActivityModel.getAgeMinLimit());
+        oldActivityModel.setAgeMaxLimit(newActivityModel.getAgeMaxLimit());
+        oldActivityModel.setCategory(newActivityModel.getCategory());
+        oldActivityModel.setCity(newActivityModel.getCity());
+        oldActivityModel.setComment(newActivityModel.getComment());
+        oldActivityModel.setDurationInMinutes(newActivityModel.getDurationInMinutes());
+        oldActivityModel.setEmail(newActivityModel.getEmail());
+        oldActivityModel.setLatitude(newActivityModel.getLatitude());
+        oldActivityModel.setLongitude(newActivityModel.getLongitude());
+        oldActivityModel.setName(newActivityModel.getName());
+        oldActivityModel.setPhoneNumber(newActivityModel.getPhoneNumber());
+        oldActivityModel.setActive(newActivityModel.isActive());
+        oldActivityModel.setPremium(newActivityModel.isPremium());
+        oldActivityModel.setPriceInHUF(newActivityModel.getPriceInHUF());
+        oldActivityModel.setSubcategory(newActivityModel.getSubcategory());
+        oldActivityModel.setZipCode(newActivityModel.getZipCode());
+        activityRepository.save(oldActivityModel);
+    }
 
     public List<ActivityModel> getActivitiesByFilters(String city, String category, String age) {
         if (category.equals("ALL")){
