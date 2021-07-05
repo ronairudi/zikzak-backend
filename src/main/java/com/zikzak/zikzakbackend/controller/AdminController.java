@@ -23,11 +23,12 @@ public class AdminController {
     }
 
     @PostMapping("/update/{id}")
-    public void updateActivity(@RequestBody Boolean isAccepted, @PathVariable("id") Long id) {
-        if ((isAccepted)) {
+    public void activateActivity(@PathVariable("id") Long id) {
             activityService.activateActivity(id);
-        } else {
-            activityService.deleteActivityById(id);
-        }
+    }
+
+    @DeleteMapping("/update/{id}")
+    public void deleteActivity(@PathVariable("id") Long id) {
+        activityService.deleteActivityById(id);
     }
 }
