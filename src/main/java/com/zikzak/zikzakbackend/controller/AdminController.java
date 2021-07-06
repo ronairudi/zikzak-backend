@@ -1,6 +1,7 @@
 package com.zikzak.zikzakbackend.controller;
 
 import com.zikzak.zikzakbackend.model.ActivityModel;
+import com.zikzak.zikzakbackend.model.ClientForm;
 import com.zikzak.zikzakbackend.service.ActivityService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,13 +23,14 @@ public class AdminController {
         return activityService.getInactiveActivities();
     }
 
-    @PostMapping("/update/{id}")
-    public void activateActivity(@PathVariable("id") Long id) {
-            activityService.activateActivity(id);
-    }
-
     @DeleteMapping("/update/{id}")
     public void deleteActivity(@PathVariable("id") Long id) {
         activityService.deleteActivityById(id);
+    }
+
+    @PostMapping("/update/{id}")
+    public void updateActivity(@PathVariable("id") Long id, @RequestBody ClientForm clientForm) {
+        ActivityModel activityModel = activityService.clientFormToActivity(clientForm);
+        activityService.updateActivityById(id, activityModel);
     }
 }
