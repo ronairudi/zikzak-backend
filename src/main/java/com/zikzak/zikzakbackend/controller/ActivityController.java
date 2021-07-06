@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@CrossOrigin(origins = {"${development.url}", "${production.url}"})
+@CrossOrigin(origins = {"${development.url}", "${production.url}"}, allowCredentials = "true")
 @RequestMapping("/activities")
 public class ActivityController {
 

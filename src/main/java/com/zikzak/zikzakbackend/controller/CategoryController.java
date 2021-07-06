@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = {"${development.url}", "${production.url}"})
+@CrossOrigin(origins = {"${development.url}", "${production.url}"}, allowCredentials = "true")
 @RequestMapping("/categories")
 public class CategoryController {
 
