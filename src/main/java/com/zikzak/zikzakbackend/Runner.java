@@ -1,8 +1,6 @@
 package com.zikzak.zikzakbackend;
 
-import com.zikzak.zikzakbackend.model.ActivityModel;
-import com.zikzak.zikzakbackend.model.Categories;
-import com.zikzak.zikzakbackend.model.UserDto;
+import com.zikzak.zikzakbackend.model.*;
 import com.zikzak.zikzakbackend.repository.ActivityRepository;
 import com.zikzak.zikzakbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +94,7 @@ public class Runner implements CommandLineRunner {
 
         activityRepository.saveAll(Arrays.asList(art, art2, sport, sport2, education, education2));
 
-        UserDto user = UserDto.builder().email("admin@zikzak.hu").password("admin").roleName("ADMIN").build();
+        UserModel user = UserModel.builder().email("admin@zikzak.hu").password("admin").role(Role.ADMIN).build();
         userService.addUser(user);
     }
 }

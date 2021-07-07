@@ -2,6 +2,7 @@ package com.zikzak.zikzakbackend.controller;
 
 import com.zikzak.zikzakbackend.model.Role;
 import com.zikzak.zikzakbackend.model.UserDto;
+import com.zikzak.zikzakbackend.model.UserModel;
 import com.zikzak.zikzakbackend.security.JwtTokenServices;
 import com.zikzak.zikzakbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,9 @@ import java.util.Map;
 @RestController
 public class AuthController {
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private JwtTokenServices jwtTokenServices;
+    private final JwtTokenServices jwtTokenServices;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, UserService userService) {
@@ -56,7 +57,9 @@ public class AuthController {
 
     @PostMapping("/registration")
     public void signUp(@RequestBody UserDto userData) {
-        userService.addUser(userData);
+        if (!userService.isDtoValid(userData)) throw new BadCredentialsException("E-mail or password doesn't meet the requirements");
+        UserModel userModel = userService.userDtoToModel(userData);
+        userService.addUser(userModel);
     }
 
     @GetMapping("/user")
