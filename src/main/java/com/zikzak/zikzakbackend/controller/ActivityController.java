@@ -7,10 +7,11 @@ import com.zikzak.zikzakbackend.service.ActivityService;
 import com.zikzak.zikzakbackend.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+@RestController
 @CrossOrigin(origins = {"${development.url}", "${production.url}"}, allowCredentials = "true")
 @RequestMapping("/activities")
 public class ActivityController {
@@ -27,15 +28,15 @@ public class ActivityController {
     }
 
     @GetMapping
-    public ResponseEntity getActivitiesByFilters(@RequestParam("city") String city,
+    public List<ActivityModel> getActivitiesByFilters(@RequestParam("city") String city,
                                                  @RequestParam("category") String category,
                                                  @RequestParam("age") String age
                                                  ) {
-        if (!categoryService.isInEnum(category) && !category.equals("ALL")) return ResponseEntity.badRequest().body("Invalid category");
+        if (!categoryService.isInEnum(category) && !category.equals("ALL")) throw new IllegalArgumentException("Invalid category");
 
-        if (!isNumeric(age) && !age.equals("ALL")) return ResponseEntity.badRequest().body("Invalid age");
+        if (!isNumeric(age) && !age.equals("ALL")) throw new IllegalArgumentException("Invalid age");
 
-        return ResponseEntity.ok(activityService.getActivitiesByFilters(city, category, age));
+        return activityService.getActivitiesByFilters(city, category, age);
     }
 
     @PostMapping("/add")
@@ -43,6 +44,27 @@ public class ActivityController {
         ActivityModel activityModel = activityService.clientFormToActivity(clientForm);
         activityService.saveActivity(activityModel);
         return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/all")
+    public List<ActivityModel> getAllActivities() {
+        return activityService.getAllActivities();
+    }
+
+    @GetMapping("/inactive")
+    public List<ActivityModel> getInactiveActivities() {
+        return activityService.getInactiveActivities();
+    }
+
+    @DeleteMapping("/update/{id}")
+    public void deleteActivity(@PathVariable("id") Long id) {
+        activityService.deleteActivityById(id);
+    }
+
+    @PostMapping("/update/{id}")
+    public void updateActivity(@PathVariable("id") Long id, @RequestBody ClientForm clientForm) {
+        ActivityModel activityModel = activityService.clientFormToActivity(clientForm);
+        activityService.updateActivityById(id, activityModel);
     }
 
     private boolean isNumeric(String strNum) {
