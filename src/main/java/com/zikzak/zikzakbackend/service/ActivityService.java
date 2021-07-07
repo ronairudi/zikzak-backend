@@ -32,6 +32,10 @@ public class ActivityService {
         activityRepository.save(activityModel);
     }
 
+    public void incrementViews(Long id) {
+        activityRepository.incrementViews(id);
+    }
+
     public List<ActivityModel> getActivitiesByFilters(String city, String category, String age) {
         if (category.equals("ALL")){
             if (age.equals("ALL")){

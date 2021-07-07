@@ -67,6 +67,11 @@ public class ActivityController {
         activityService.updateActivityById(id, activityModel);
     }
 
+    @PostMapping("/increment/{id}")
+    public void incrementViews(@PathVariable("id") Long id) {
+        activityService.incrementViews(id);
+    }
+
     private boolean isNumeric(String strNum) {
         return strNum.matches("\\d+");
     }
