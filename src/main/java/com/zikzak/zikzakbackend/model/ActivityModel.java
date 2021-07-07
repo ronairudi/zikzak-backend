@@ -62,4 +62,6 @@ public class ActivityModel {
     private boolean isActive;
 
     private boolean isPremium;
+
+    private long views;
 }
