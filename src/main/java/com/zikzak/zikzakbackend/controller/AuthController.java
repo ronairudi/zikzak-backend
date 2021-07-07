@@ -3,8 +3,10 @@ package com.zikzak.zikzakbackend.controller;
 import com.zikzak.zikzakbackend.model.Role;
 import com.zikzak.zikzakbackend.model.UserDto;
 import com.zikzak.zikzakbackend.model.UserModel;
+import com.zikzak.zikzakbackend.model.validation.Validation;
 import com.zikzak.zikzakbackend.security.JwtTokenServices;
 import com.zikzak.zikzakbackend.service.UserService;
+import com.zikzak.zikzakbackend.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +30,14 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final JwtTokenServices jwtTokenServices;
+    private final ValidationService validationService;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, UserService userService) {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, UserService userService, ValidationService validationService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtTokenServices = jwtTokenServices;
+        this.validationService = validationService;
     }
 
     @PostMapping(path = "/login")
@@ -60,6 +64,8 @@ public class AuthController {
         if (!userService.isDtoValid(userData)) throw new BadCredentialsException("E-mail or password doesn't meet the requirements");
         UserModel userModel = userService.userDtoToModel(userData);
         userService.addUser(userModel);
+        Validation validation = validationService.createValidationForUser(userModel.getId());
+        validationService.saveValidation(validation);
     }
 
     @GetMapping("/user")
