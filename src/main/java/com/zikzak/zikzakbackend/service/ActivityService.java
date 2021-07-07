@@ -8,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class ActivityService {
 
     @Autowired
     private ActivityRepository activityRepository;
+
+    public List<ActivityModel> getAllActivities() {
+        return activityRepository.findAll();
+    }
 
     public void saveActivity(ActivityModel activityModel) {
         activityRepository.save(activityModel);
