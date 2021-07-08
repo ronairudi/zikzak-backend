@@ -97,7 +97,7 @@ public class AuthController {
         message.setTo(userModel.getEmail());
         message.setSubject("Activate your email!");
         message.setFrom(fromEmail);
-        message.setText("To confirm your registration, please click the following link : " + hostUrl + "/validate/" + validation.getValidationCode());
+        message.setText("To confirm your registration, please click the following link : " + hostUrl + "/validate?k=" + validation.getValidationCode());
 
         return message;
     }
