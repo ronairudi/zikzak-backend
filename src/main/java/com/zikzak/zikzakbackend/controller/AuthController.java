@@ -25,6 +25,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @CrossOrigin(origins = {"${development.url}", "${production.url}"}, allowCredentials = "true")
 @RestController
@@ -71,7 +72,6 @@ public class AuthController {
 
     @PostMapping("/registration")
     public void signUp(@RequestBody UserDto userData) {
-        System.out.println(hostUrl);
         if (!userService.isDtoValid(userData)) throw new BadCredentialsException("E-mail or password doesn't meet the requirements");
         UserModel userModel = userService.userDtoToModel(userData);
         userService.addUser(userModel);
@@ -89,6 +89,11 @@ public class AuthController {
         String formattedRole = authentication.getAuthorities().stream().findFirst().orElseThrow().getAuthority().substring(5);
         userDetails.put("role", formattedRole);
         return userDetails;
+    }
+
+    @PostMapping("/validate/{validationCode}")
+    public void validate(@PathVariable UUID validationCode) {
+        validationService.deleteValidationByCode(validationCode);
     }
 
     private SimpleMailMessage createValidationEmail(UserModel userModel, Validation validation) {

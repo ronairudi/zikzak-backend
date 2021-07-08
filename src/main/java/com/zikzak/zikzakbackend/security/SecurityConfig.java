@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/activities/update/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/activities/inactive").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/activities/increment/{id}").permitAll()
+                .antMatchers(HttpMethod.POST, "/validate/{ValidationCoded}").permitAll()
                 .anyRequest().denyAll()
                 .and()
                 .addFilterBefore(new JwtTokenFilter(jwtTokenServices), UsernamePasswordAuthenticationFilter.class);

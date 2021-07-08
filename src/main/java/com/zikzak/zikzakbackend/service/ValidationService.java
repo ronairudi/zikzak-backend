@@ -17,6 +17,10 @@ public class ValidationService {
         validationRepository.save(validation);
     }
 
+    public void deleteValidationByCode(UUID validationCode) {
+        validationRepository.deleteByValidationCode(validationCode);
+    }
+
     public Validation createValidationForUser(Long userId) {
         return Validation.builder()
                 .userId(userId)
