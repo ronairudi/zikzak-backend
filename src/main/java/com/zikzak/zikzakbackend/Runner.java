@@ -5,6 +5,7 @@ import com.zikzak.zikzakbackend.repository.ActivityRepository;
 import com.zikzak.zikzakbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -17,6 +18,9 @@ public class Runner implements CommandLineRunner {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
@@ -94,7 +98,7 @@ public class Runner implements CommandLineRunner {
 
         activityRepository.saveAll(Arrays.asList(art, art2, sport, sport2, education, education2));
 
-        UserModel user = UserModel.builder().email("admin@zikzak.hu").password("admin").role(Role.ADMIN).build();
+        UserModel user = UserModel.builder().email("admin@zikzak.hu").password(passwordEncoder.encode("admin")).role(Role.ADMIN).build();
         userService.addUser(user);
     }
 }
