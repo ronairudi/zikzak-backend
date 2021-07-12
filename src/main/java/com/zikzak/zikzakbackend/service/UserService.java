@@ -21,23 +21,33 @@ public class UserService {
         passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    public void addUser(UserDto userData) {
-        String email = userData.getEmail();
+    public void addUser(UserModel userModel) {
+        String email = userModel.getEmail();
 
         if (isEmailUnique(email)) {
-            UserModel user = UserModel.builder()
-                    .email(email)
-                    .password(passwordEncoder.encode(userData.getPassword()))
-                    .role(Role.valueOf(userData.getRoleName()))
-                    .build();
-
-            userRepository.save(user);
+            userRepository.save(userModel);
         }
+    }
+
+    public UserModel userDtoToModel(UserDto userDto) {
+        return UserModel.builder()
+                .email(userDto.getEmail())
+                .password(passwordEncoder.encode(userDto.getPassword()))
+                .role(Role.CLIENT)
+                .build();
+    }
+
+    public boolean isDtoValid(UserDto userDto) {
+        return isEmailUnique(userDto.getEmail()) && passwordValid(userDto.getPassword());
     }
 
     private boolean isEmailUnique(String email) {
         if (userRepository.findByEmail(email).isEmpty()) return true;
         else throw new IllegalArgumentException("Email address already in use.");
+    }
+
+    private boolean passwordValid(String pw) {
+        return pw.length() >= 8;
     }
 
 }

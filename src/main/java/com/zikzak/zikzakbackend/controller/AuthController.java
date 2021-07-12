@@ -2,11 +2,17 @@ package com.zikzak.zikzakbackend.controller;
 
 import com.zikzak.zikzakbackend.model.Role;
 import com.zikzak.zikzakbackend.model.UserDto;
+import com.zikzak.zikzakbackend.model.UserModel;
+import com.zikzak.zikzakbackend.model.validation.Validation;
 import com.zikzak.zikzakbackend.security.JwtTokenServices;
+import com.zikzak.zikzakbackend.service.EmailService;
 import com.zikzak.zikzakbackend.service.UserService;
+import com.zikzak.zikzakbackend.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,20 +25,30 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @CrossOrigin(origins = {"${development.url}", "${production.url}"}, allowCredentials = "true")
 @RestController
 public class AuthController {
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private JwtTokenServices jwtTokenServices;
+    private final JwtTokenServices jwtTokenServices;
+    private final ValidationService validationService;
+    private final EmailService emailService;
+
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+    @Value("${development.url}")
+    private String hostUrl;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, UserService userService) {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, UserService userService, ValidationService validationService, EmailService emailService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtTokenServices = jwtTokenServices;
+        this.validationService = validationService;
+        this.emailService = emailService;
     }
 
     @PostMapping(path = "/login")
@@ -56,7 +72,13 @@ public class AuthController {
 
     @PostMapping("/registration")
     public void signUp(@RequestBody UserDto userData) {
-        userService.addUser(userData);
+        if (!userService.isDtoValid(userData)) throw new BadCredentialsException("E-mail or password doesn't meet the requirements");
+        UserModel userModel = userService.userDtoToModel(userData);
+        userService.addUser(userModel);
+        Validation validation = validationService.createValidationForUser(userModel.getId());
+        validationService.saveValidation(validation);
+        SimpleMailMessage email = this.createValidationEmail(userModel, validation);
+        emailService.sendEmail(email);
     }
 
     @GetMapping("/user")
@@ -67,6 +89,22 @@ public class AuthController {
         String formattedRole = authentication.getAuthorities().stream().findFirst().orElseThrow().getAuthority().substring(5);
         userDetails.put("role", formattedRole);
         return userDetails;
+    }
+
+    @PostMapping("/validate/{validationCode}")
+    public void validate(@PathVariable UUID validationCode) {
+        validationService.deleteValidationByCode(validationCode);
+    }
+
+    private SimpleMailMessage createValidationEmail(UserModel userModel, Validation validation) {
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(userModel.getEmail());
+        message.setSubject("Activate your email!");
+        message.setFrom(fromEmail);
+        message.setText("To confirm your registration, please click the following link : " + hostUrl + "/validate?k=" + validation.getValidationCode());
+
+        return message;
     }
 
 }
